@@ -16,29 +16,28 @@ type server struct {
 }
 
 func (*server) GetAvailability(req *availabilitypb.AvailabiltyRequest, stream availabilitypb.AvailabiltyService_GetAvailabilityServer) error {
-	for {
-		source := req.GetSource()
-		x := source.GetLatitude()
-		y := source.GetLongitude()
-		userlocation := data.LocationName[x][y]
-		for _, c := range data.Carpool {
-			var a, b int
-			if c.Available {
-				a, b = service.RandomNumberGenerator()
-				CarLocation := data.LocationName[a][b]
-				m := service.Distance(a, b, userlocation)
-				res := &availabilitypb.AvailabiltyResponse{
-					CarType:  c.Model,
-					Location: CarLocation,
-					Distance: m,
-				}
-				stream.Send(res)
-				log.Printf("Sent:%v", res)
-				time.Sleep(20 * time.Nanosecond)
+	source := req.GetSource()
+	x := source.GetLatitude()
+	y := source.GetLongitude()
+	userlocation := data.LocationName[x][y]
+	for _, c := range data.Carpool {
+		var a, b int
+		if c.Available {
+			a, b = service.RandomNumberGenerator()
+			CarLocation := data.LocationName[a][b]
+			m := service.Distance(a, b, userlocation)
+			res := &availabilitypb.AvailabiltyResponse{
+				CarType:  c.Model,
+				Location: CarLocation,
+				Distance: m,
 			}
+			stream.Send(res)
+			log.Printf("Sent:%v", res)
+			time.Sleep(2 * time.Nanosecond)
 		}
-		time.Sleep(20 * time.Second)
 	}
+	//time.Sleep(20 * time.Second)
+	return nil
 }
 
 func main() {
