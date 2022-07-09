@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package routingpb;
+
+option go_package="github.com/Dinesh789kumar12/POC1/CarAppPb/routingpb";
+
+message RoutingRequest {
+    int32 carType=1;
+    float distance=2;
+    string source=3;
+    string startDate = 4;
+}
+
+message RoutingResponse {
+    string carType = 1;
+    string startDate = 2;
+    float distance=4;
+    float ratePerhour = 5;
+}
+
+
+message AvailabiltyRequest{
+    Location source=2;
+}
+
+message AvailabiltyResponse{
+    string carType=1;
+    float distance=2;
+}
+
+message Location{
+    int32  latitude=1;
+     int32 longitude=2;
+  }
+
+message bookingRequest {
+    string carType = 1;
+    string source=2;
+    string destination=3;
+    string startDate = 4;
+    Passenger passenger=5;
+}
+
+message Passenger{
+    string name=1;
+    uint32 age=2;
+}
+
+message bookingResponse {
+    int32 id=1;
+    string carAvailbility=2;
+}
+
+message confirmRequest{
+    int32 id=1;
+}
+
+message confirmResponse{
+    int32 bookingId=1;
+    string status=2;
+    string carType = 3;
+    string Date = 4;
+    string source=5;
+    string destination=6;
+    Passenger passenger=7;
+    float estimateAmount=8;
+}
+
+service RoutingService {
+    rpc GetRates (stream RoutingRequest) returns (stream RoutingResponse) {};
+    rpc Booking(stream bookingRequest) returns (stream bookingResponse){};
+    rpc GetAvailability(stream AvailabiltyRequest) returns (stream AvailabiltyResponse) {};
+    rpc Confirmation (confirmRequest) returns (confirmResponse){};
+}

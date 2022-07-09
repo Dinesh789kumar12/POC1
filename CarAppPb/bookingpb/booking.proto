@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package routingpb;
+
+option go_package="github.com/Dinesh789kumar12/POC/CarRental-Pb/routingpb";
+
+message bookingRequest {
+    string carType = 1;
+    string startDate = 2;
+    string endDate = 3;
+    string source=4;
+    string destination=5;
+    Passenger passenger=6;
+}
+
+message Passenger{
+    string name=1;
+    uint32 age=2;
+}
+
+message bookingResponse {
+    int32 id=2;
+}
+
+message confirmRequest{
+    int32 id=1;
+    string isbooked=2; 
+}
+
+message confrmResponse{
+    int32 bookingId=1;
+    string status=2;
+    string carType = 3;
+    string Date = 4;
+    string source=5;
+    string destination=6;
+    Passenger passenger=7;
+}
+
+service BookingService {
+    rpc Booking (bookingRequest) returns (bookingResponse) {};
+    rpc Confirmation (confirmRequest) returns (confrmResponse){};
+}

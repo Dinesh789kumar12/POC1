@@ -1,0 +1,20 @@
+syntax ="proto3";
+
+package ratepb;
+
+option go_package="github.com/Dinesh789kumar12/POC1/CarAppPb/ratepb";
+
+message rateRequest{
+string carType=1;
+string time=2;
+int32 distance=3;
+}
+
+message rateResponse{
+int32 price=1;
+}
+
+service RateShopService{
+    rpc getRate(stream rateRequest) returns (stream rateResponse) {};
+}
+
