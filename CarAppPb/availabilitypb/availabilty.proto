@@ -12,7 +12,7 @@ message AvailabiltyRequest{
 message AvailabiltyResponse{
     string carType=1;
     string Location=2;
-    int32 distance=3;
+    float distance=3;
 }
 
 message Location{

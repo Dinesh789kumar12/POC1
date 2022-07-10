@@ -20,12 +20,13 @@ message RoutingResponse {
 
 
 message AvailabiltyRequest{
-    Location source=2;
+    Location source=1;
 }
 
 message AvailabiltyResponse{
     string carType=1;
-    float distance=2;
+    string Location=2;
+    int32 distance=3;
 }
 
 message Location{
