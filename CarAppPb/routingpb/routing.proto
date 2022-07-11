@@ -29,6 +29,10 @@ message AvailabiltyResponse{
     int32 distance=3;
 }
 
+message ListAvailabiltyResponse{
+    repeated AvailabiltyResponse availabiltyResponse=1;
+}
+
 message Location{
     int32  latitude=1;
      int32 longitude=2;
@@ -70,6 +74,6 @@ message confirmResponse{
 service RoutingService {
     rpc GetRates (stream RoutingRequest) returns (stream RoutingResponse) {};
     rpc Booking(stream bookingRequest) returns (stream bookingResponse){};
-    rpc GetAvailability(stream AvailabiltyRequest) returns (stream AvailabiltyResponse) {};
+    rpc GetAvailability(stream AvailabiltyRequest) returns (stream ListAvailabiltyResponse) {};
     rpc Confirmation (confirmRequest) returns (confirmResponse){};
 }

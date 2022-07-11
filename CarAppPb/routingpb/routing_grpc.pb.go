@@ -109,7 +109,7 @@ func (c *routingServiceClient) GetAvailability(ctx context.Context, opts ...grpc
 
 type RoutingService_GetAvailabilityClient interface {
 	Send(*AvailabiltyRequest) error
-	Recv() (*AvailabiltyResponse, error)
+	Recv() (*ListAvailabiltyResponse, error)
 	grpc.ClientStream
 }
 
@@ -121,8 +121,8 @@ func (x *routingServiceGetAvailabilityClient) Send(m *AvailabiltyRequest) error 
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *routingServiceGetAvailabilityClient) Recv() (*AvailabiltyResponse, error) {
-	m := new(AvailabiltyResponse)
+func (x *routingServiceGetAvailabilityClient) Recv() (*ListAvailabiltyResponse, error) {
+	m := new(ListAvailabiltyResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -235,7 +235,7 @@ func _RoutingService_GetAvailability_Handler(srv interface{}, stream grpc.Server
 }
 
 type RoutingService_GetAvailabilityServer interface {
-	Send(*AvailabiltyResponse) error
+	Send(*ListAvailabiltyResponse) error
 	Recv() (*AvailabiltyRequest, error)
 	grpc.ServerStream
 }
@@ -244,7 +244,7 @@ type routingServiceGetAvailabilityServer struct {
 	grpc.ServerStream
 }
 
-func (x *routingServiceGetAvailabilityServer) Send(m *AvailabiltyResponse) error {
+func (x *routingServiceGetAvailabilityServer) Send(m *ListAvailabiltyResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 

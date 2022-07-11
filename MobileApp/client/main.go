@@ -19,6 +19,10 @@ type Car struct {
 	Distance int32  `json:"distance"`
 }
 
+type AvailableResponse struct {
+	listAvailableCar []Car
+}
+
 func main() {
 	router := gin.Default()
 	rg := router.Group("api/v1/carapp")
@@ -75,7 +79,6 @@ func fetchAvailableCarNear(c *gin.Context) {
 		log.Fatalf("Failed to connect to server %v", e)
 	}
 	defer conn.Close()
-
 	client := routingpb.NewRoutingServiceClient(conn)
 	carAvailability, err := client.GetAvailability(context.Background())
 	if err != nil {
@@ -87,7 +90,13 @@ func fetchAvailableCarNear(c *gin.Context) {
 			Longitude: 2,
 		},
 	}
-	carAvailability.Send(&req)
+	if err := carAvailability.Send(&req); err != nil {
+		log.Fatalf("Error while send to GetAvailability Server: %v", err)
+	}
+	if err := carAvailability.CloseSend(); err != nil {
+		log.Fatalf("Error while close send to Get Availability Server: %v", err)
+	}
+	var carpool []AvailableResponse
 	go func() {
 		for {
 			msg, err := carAvailability.Recv()
@@ -98,8 +107,10 @@ func fetchAvailableCarNear(c *gin.Context) {
 				log.Fatalf("Error occured while reading stream %v", err)
 			}
 
-			a := Car{CarType: msg.GetCarType(), Location: "New Delhi", Distance: int32(msg.GetDistance())}
-			carpool = append(carpool, a)
+			resRouting := routingpb.ListAvailabiltyResponse{
+				AvailabiltyResponse: msg.GetAvailabiltyResponse(),
+			}
+			carpool = append(carpool, resRouting)
 			log.Printf("receive:%v\n", msg)
 		}
 		c.IndentedJSON(http.StatusOK, &carpool)
